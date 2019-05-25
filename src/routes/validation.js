@@ -9,6 +9,26 @@ module.exports = {
     const errors = req.validationErrors();
 
     if (errors) {
+      console.log(errors);
+      req.flash("error", errors);
+      return res.redirect(req.headers.referer);
+    } else {
+      return next();
+    }
+  },
+
+  validateNumberPatternChallenges(req, res, next) {
+    if (req.method == "POST") {
+      console.log("TODO: fill out number pattern challenge requirements for validation");
+      // req.checkBody("email", "must be valid").isEmail();
+      // req.checkBody("password", "must be at least 6 characters in length").isLength({min: 6});
+      // req.checkBody("passwordConfirmation", "must match password provided").optional().matches(req.body.password);
+    }
+
+    const errors = req.validationErrors();
+
+    if (errors) {
+      console.log(errors);
       req.flash("error", errors);
       return res.redirect(req.headers.referer);
     } else {

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <% include ./../static/partials/head.ejs %>
+  </head>
+  <body>
+    <% include ./../static/partials/navbar.ejs %>
+    <main class="container">
+      There are <%= numberPatternChallenges.length %> number pattern challenges.
+      <% numberPatternChallenges.forEach((numberPatternChallenge) => { %>
+        <li class="list-group-item">
+          <a href="/number_pattern_challenges/<%= numberPatternChallenge.id %>"><%= numberPatternChallenge.id %></a>
+        </li>
+      <% }) %>
+      <% include ./../static/partials/messages.ejs %>
+    </main>
+  </body>
+</html>

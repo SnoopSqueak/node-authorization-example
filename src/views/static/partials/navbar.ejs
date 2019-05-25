@@ -1,13 +1,22 @@
-<nav>
-  <ul>
-    <li>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+  <ul class="container">
+    <li class="nav-item">
       <a href="#">Home</a>
-      <% if (currentUser) { %>
-        <a href="/users/sign_out">Sign out</a>
-      <% } else { %>
-        <a href="/users/sign_up">Sign up</a>
-        <a href="/users/sign_in">Sign in</a>
-      <% } %>
     </li>
+      <% if (currentUser) { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/users/sign_out">Sign out</a>
+        </li>
+      <% } else { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/users/sign_up">Sign up</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/users/sign_in">Sign in</a>
+        </li>
+      <% } %>
+      <li>
+        <a class="nav-link" href="/number_pattern_challenges">View Challenges</a>
+      </li>
   </ul>
 </nav>
