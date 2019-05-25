@@ -2,6 +2,12 @@
   <ul>
     <li>
       <a href="#">Home</a>
+      <% if (currentUser) { %>
+        <a href="/users/sign_out">Sign out</a>
+      <% } else { %>
+        <a href="/users/sign_up">Sign up</a>
+        <a href="/users/sign_in">Sign in</a>
+      <% } %>
     </li>
   </ul>
 </nav>
