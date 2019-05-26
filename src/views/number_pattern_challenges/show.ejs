@@ -8,18 +8,10 @@
     <main>
       <% include ./../static/partials/messages.ejs %>
       <h1>Number Pattern Challenge #<%= numberPatternChallenge.id %></h1>
-      <p>
-        Formula:
-        <%= numberPatternChallenge.formula %>
-      </p>
-      <p>
-        Slots:
-        <%= numberPatternChallenge.slots %>
-      </p>
-      <p>
-        Blanks:
-        <%= numberPatternChallenge.blanks %>
-      </p>
+      <h4>Formula:</h4>
+      <p><%= math.parse(numberPatternChallenge.formula).toString() %></p>
+      <h4>Challenge:</h4>
+      <p><%= numberPatternChallenge.challenge %></p>
     </main>
     <% include ./../static/partials/baseScripts.ejs %>
   </body>

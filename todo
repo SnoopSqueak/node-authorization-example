@@ -1,0 +1,12 @@
+* Fix `currentUser` not working in navbar
+* Add the ability to "attempt" challenges by filling in the blanks and submitting to compare with the real answers
+* Fix blank parsing, currently "19" would count as 1, 9, and 19.
+
+Authentication:
+* Only display the formula on a number pattern challenge if you're the owner or if you have already solved it
+* Guest users can look at challenges, and maybe even attempt them, without an account
+* Standard users are guests plus the ability to create challenges, and the abilities to update and delete their own challenges
+* Admin users are standard users plus the ability to delete ANY challenge
+
+* integration testing would be nice, although it would take more time to be comprehensive than I have, so specs in this project will be light.
+  There will be some for the authentication stories.

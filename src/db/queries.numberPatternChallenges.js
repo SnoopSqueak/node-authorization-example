@@ -27,7 +27,8 @@ module.exports = {
       slots: newNumberPatternChallenge.slots,
       formula: newNumberPatternChallenge.formula,
       blanks: newNumberPatternChallenge.blanks,
-      userId: newNumberPatternChallenge.userId
+      userId: newNumberPatternChallenge.userId,
+      constant: newNumberPatternChallenge.constant
     })
     .then((numberPatternChallenge) => {
       callback(null, numberPatternChallenge);

@@ -1,5 +1,5 @@
 const numberPatternChallengesQueries = require("../db/queries.numberPatternChallenges.js");
-// const passport = require("passport");
+const math = require("mathjs");
 
 module.exports = {
   index(req, res, next) {
@@ -21,7 +21,30 @@ module.exports = {
         console.log(err);
         res.redirect(404, "/");
       } else {
-        res.render("number_pattern_challenges/show", {numberPatternChallenge});
+        // Challenge:
+        // <% for (var i = 1; i < numberPatternChallenge.slots + 1; i++) { %>
+        //   <% if (numberPatternChallenge.blanks.includes(i)) { %>
+        //     <%= "_".trim() %>
+        //   <% } else { %>
+        //     <%= math.parse(numberPatternChallenge.formula).compile().eval({x: i}).toString().trim() %>
+        //   <% } %>
+        //   <% if (i < numberPatternChallenge.slots) { %>
+        //     <%= ",".trim() %>
+        //   <% } %>
+        // <% } %>
+        let challenge = '';
+        for (var i = 1; i < numberPatternChallenge.slots + 1; i++) {
+          if (numberPatternChallenge.blanks.includes(i)) {
+            challenge += '_';
+          } else {
+            challenge += math.parse(numberPatternChallenge.formula).compile().eval({x: i});
+          }
+          if (i < numberPatternChallenge.slots) {
+            challenge += ', ';
+          }
+        }
+        numberPatternChallenge.challenge = challenge;
+        res.render("number_pattern_challenges/show", {numberPatternChallenge, math});
       }
     });
   },
@@ -31,18 +54,12 @@ module.exports = {
   },
 
   create(req, res, next) {
-    console.log('\n\n');
-    console.log(req.user);
-    console.log('\n\n');
-    console.log(req.user.dataValues);
-    console.log('\n\n');
-    console.log(req.user.dataValues.id);
-    console.log('\n\n');
     let newNumberPatternChallenge = {
       slots: req.body.slots,
       blanks: req.body.blanks,
       formula: req.body.formula,
-      userId: req.user.dataValues.id
+      userId: req.user.dataValues.id,
+      constant: req.body.constant
     };
     numberPatternChallengesQueries.createNumberPatternChallenge(newNumberPatternChallenge, (err, numberPatternChallenge) => {
       if (err) {
@@ -53,13 +70,8 @@ module.exports = {
         req.flash("error", {param: err.name, msg: err.errors[0].message});
         res.redirect("/number_pattern_challenges/sign_up");
       } else {
-        console.log("TODO: work out what happens when a number pattern challenge is created");
         req.flash("notice", "New number pattern challenge was created!");
         res.redirect("/number_pattern_challenges/" + numberPatternChallenge.id);
-        // passport.authenticate("local")(req, res, () => {
-        //   req.flash("notice", "You've successfully signed in!");
-        //   res.redirect("/");
-        // });
       }
     });
   }
