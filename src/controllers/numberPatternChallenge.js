@@ -26,13 +26,25 @@ module.exports = {
     });
   },
 
+  new(req, res, next) {
+    res.render("number_pattern_challenges/new");
+  },
+
   create(req, res, next) {
+    console.log('\n\n');
+    console.log(req.user);
+    console.log('\n\n');
+    console.log(req.user.dataValues);
+    console.log('\n\n');
+    console.log(req.user.dataValues.id);
+    console.log('\n\n');
     let newNumberPatternChallenge = {
-      email: req.body.email,
-      password: req.body.password,
-      passwordConfirmation: req.body.passwordConfirmation
+      slots: req.body.slots,
+      blanks: req.body.blanks,
+      formula: req.body.formula,
+      userId: req.user.dataValues.id
     };
-    numberPatternChallengesQueries.createNumberPatternChallenge(newNumberPatternChallenge, (err, user) => {
+    numberPatternChallengesQueries.createNumberPatternChallenge(newNumberPatternChallenge, (err, numberPatternChallenge) => {
       if (err) {
         console.log(err);
         // this line probably won't work based on messages.ejs...
@@ -42,6 +54,8 @@ module.exports = {
         res.redirect("/number_pattern_challenges/sign_up");
       } else {
         console.log("TODO: work out what happens when a number pattern challenge is created");
+        req.flash("notice", "New number pattern challenge was created!");
+        res.redirect("/number_pattern_challenges/" + numberPatternChallenge.id);
         // passport.authenticate("local")(req, res, () => {
         //   req.flash("notice", "You've successfully signed in!");
         //   res.redirect("/");

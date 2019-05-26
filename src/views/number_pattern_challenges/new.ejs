@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <% include ./../static/partials/head.ejs %>
+  </head>
+  <body>
+    <% include ./../static/partials/navbar.ejs %>
+    <main>
+      <% include ./../static/partials/messages.ejs %>
+      <h1>New Number Pattern Challenge</h1>
+      <form action="/number_pattern_challenges" method="post">
+        <div class="form-group">
+          <label for="formula">Enter a mathematical formula</label>
+          <input type="text" class="form-control" name="formula" placeholder="2x">
+        </div>
+        <div class="form-group">
+          <label for="slots">Enter the length of the pattern</label>
+          <input type="text" class="form-control" name="slots" placeholder="5">
+        </div>
+        <div class="form-group">
+          <!-- In the future, I'd like to display a row of X checkboxes, where
+              X is the selected number of slots. The user could check up to
+              (X-1)/2 checkboxes representing slots that the puzzle solver
+              will have to fill in. -->
+          <!-- For now, a string like "2-4" could mean to leave the 2nd and 4th
+              slots blank. -->
+          <label for="blanks">Enter one or more blank slots</label>
+          <input type="text" class="form-control" name="blanks" placeholder="3">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </main>
+    <% include ./../static/partials/baseScripts.ejs %>
+  </body>
+</html>

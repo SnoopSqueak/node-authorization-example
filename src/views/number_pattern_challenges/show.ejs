@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <% include ./../static/partials/head.ejs %>
+  </head>
+  <body>
+    <% include ./../static/partials/navbar.ejs %>
+    <main>
+      <% include ./../static/partials/messages.ejs %>
+      <h1>Number Pattern Challenge #<%= numberPatternChallenge.id %></h1>
+      <p>
+        Formula:
+        <%= numberPatternChallenge.formula %>
+      </p>
+      <p>
+        Slots:
+        <%= numberPatternChallenge.slots %>
+      </p>
+      <p>
+        Blanks:
+        <%= numberPatternChallenge.blanks %>
+      </p>
+    </main>
+    <% include ./../static/partials/baseScripts.ejs %>
+  </body>
+</html>

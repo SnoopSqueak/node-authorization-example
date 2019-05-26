@@ -6,7 +6,10 @@
   <body>
     <% include ./../static/partials/navbar.ejs %>
     <main class="container">
-      There are <%= numberPatternChallenges.length %> number pattern challenges.
+      <a href="/number_pattern_challenges/new" class="btn btn-success">New Number Pattern Challenge</a>
+      <p>
+        There are <%= numberPatternChallenges.length %> number pattern challenges.
+      </p>
       <% numberPatternChallenges.forEach((numberPatternChallenge) => { %>
         <li class="list-group-item">
           <a href="/number_pattern_challenges/<%= numberPatternChallenge.id %>"><%= numberPatternChallenge.id %></a>

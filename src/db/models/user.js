@@ -15,7 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     role: DataTypes.INTEGER
   }, {});
   User.associate = function(models) {
-    // associations can be defined here
+    User.hasMany(models.NumberPatternChallenge, {
+      foreignKey: "userId",
+      as: "numberPatternChallenges"
+    })
   };
   return User;
 };

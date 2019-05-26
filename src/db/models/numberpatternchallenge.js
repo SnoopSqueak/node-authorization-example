@@ -6,7 +6,10 @@ module.exports = (sequelize, DataTypes) => {
     blanks: DataTypes.STRING(9)
   }, {});
   NumberPatternChallenge.associate = function(models) {
-    // associations can be defined here
+    NumberPatternChallenge.belongsTo(models.User, {
+      foreignKey: "userId",
+      onDelete: "CASCADE"
+    })
   };
   return NumberPatternChallenge;
 };
