@@ -1,4 +1,3 @@
-* Fix `currentUser` not working in navbar
 * Add the ability to "attempt" challenges by filling in the blanks and submitting to compare with the real answers
 * Fix blank parsing, currently "19" would count as 1, 9, and 19.
 
