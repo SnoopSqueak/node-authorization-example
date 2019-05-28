@@ -4,8 +4,8 @@ const viewsFolder = path.join(__dirname, "..", "views");
 const passportConfig = require("./passport-config");
 const session = require("express-session");
 const flash = require("express-flash");
-const bodyParser = require('body-parser')
-const expressValidator = require('express-validator')
+const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
 
 module.exports = {
   init(app, express) {
@@ -26,5 +26,6 @@ module.exports = {
       res.locals.currentUser = req.user;
       next();
     });
+    app.locals.math = require('mathjs');
   }
 };

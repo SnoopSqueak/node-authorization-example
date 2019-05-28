@@ -11,11 +11,11 @@
       <form action="/number_pattern_challenges" method="post">
         <div class="form-group">
           <label for="formula">Enter a mathematical formula</label>
-          <input type="text" class="form-control" name="formula" placeholder="2x">
+          <input id="formula-input" type="text" class="form-control" name="formula" placeholder="2x">
         </div>
         <div class="form-group">
           <label for="slots">Enter the length of the pattern</label>
-          <input type="text" class="form-control" name="slots" placeholder="5">
+          <input id="slot-input" type="text" class="form-control" name="slots" placeholder="5" onchange="(e) => updateBlanks()">
         </div>
         <div class="form-group">
           <!-- In the future, I'd like to display a row of X checkboxes, where
@@ -25,7 +25,9 @@
           <!-- For now, a string like "2-4" could mean to leave the 2nd and 4th
               slots blank. -->
           <label for="blanks">Enter one or more blank slots</label>
-          <input type="text" class="form-control" name="blanks" placeholder="3">
+          <div id="blank-input" class="form-check-inline">
+            (You must enter a length before you can choose blanks.)
+          </div>
         </div>
         <div class="form-group">
           <label for="constant">Enter the first number in the sequence</label>
@@ -35,5 +37,24 @@
       </form>
     </main>
     <% include ./../static/partials/baseScripts.ejs %>
+    <script>
+      function updateBlanks () {
+        console.log("test");
+      }
+      $(document).ready(() => {
+        $('#slot-input').change((e) => {
+          let slots = $('#slot-input').val();
+          let html = '';
+          let formula = $('#formula-input').val();
+          console.log(math.parse(formula));
+          for (var i = 0; i < slots; i++) {
+            html += '<label class="form-check-label">';
+            html += '<input type="checkbox" class="form-check-input" name="blank-' + (i + 1) + '">';
+            html += '</label>';
+          }
+          $('#blank-input').html(html);
+        });
+      });
+    </script>
   </body>
 </html>

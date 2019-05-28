@@ -50,7 +50,7 @@ module.exports = {
   },
 
   new(req, res, next) {
-    res.render("number_pattern_challenges/new");
+    res.render("number_pattern_challenges/new", {math: JSON.stringify(math)});
   },
 
   create(req, res, next) {
