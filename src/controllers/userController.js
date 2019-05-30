@@ -11,9 +11,9 @@ module.exports = {
   },
 
   signIn(req, res, next) {
-    passport.authenticate("local")(req, res, () => {
+    passport.authenticate("local")(req, res, (param) => {
       if (!req.user) {
-        req.flash("notice", "Sign in failed. Please try again.");
+        req.flash("notice", "Sign in failed. Please try again, or sign up if you don't have an account.");
         res.redirect("/users/sign_in");
       } else {
         req.flash("notice", "You've successfully signed in!");
@@ -37,9 +37,6 @@ module.exports = {
     userQueries.createUser(newUser, (err, user) => {
       if (err) {
         console.log(err);
-        // this line probably won't work based on messages.ejs...
-        // i'll check the error object in the log and figure out which
-        // property stores the actual error message
         req.flash("error", {param: err.name, msg: err.errors[0].message});
         res.redirect("/users/sign_up");
       } else {

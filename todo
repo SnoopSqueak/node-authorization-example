@@ -1,5 +1,4 @@
 * Add the ability to "attempt" challenges by filling in the blanks and submitting to compare with the real answers
-* Fix blank parsing, currently "19" would count as 1, 9, and 19.
 
 Authentication:
 * Only display the formula on a number pattern challenge if you're the owner or if you have already solved it

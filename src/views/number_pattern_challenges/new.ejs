@@ -10,50 +10,93 @@
       <h1>New Number Pattern Challenge</h1>
       <form action="/number_pattern_challenges" method="post">
         <div class="form-group">
-          <label for="formula">Enter a mathematical formula</label>
-          <input id="formula-input" type="text" class="form-control" name="formula" placeholder="2x">
+          <label for="formula">Enter a mathematical formula:</label>
+          <input id="simplified-formula-input" type="hidden" name="formula">
+          <input id="formula-input" type="text" class="form-control" placeholder="2x">
+          <span id="formula-simplified"></span>
         </div>
         <div class="form-group">
-          <label for="slots">Enter the length of the pattern</label>
-          <input id="slot-input" type="text" class="form-control" name="slots" placeholder="5" onchange="(e) => updateBlanks()">
+          <label for="slots">Enter the length of the pattern:</label>
+          <input id="slot-input" type="text" class="form-control" name="slots" placeholder="5" value="5" onchange="(e) => updateBlanks()">
         </div>
         <div class="form-group">
-          <!-- In the future, I'd like to display a row of X checkboxes, where
-              X is the selected number of slots. The user could check up to
-              (X-1)/2 checkboxes representing slots that the puzzle solver
-              will have to fill in. -->
-          <!-- For now, a string like "2-4" could mean to leave the 2nd and 4th
-              slots blank. -->
-          <label for="blanks">Enter one or more blank slots</label>
-          <div id="blank-input" class="form-check-inline">
+          <label id="blank-label" for="blanks">Choose one or more slots to be blank:</label>
+          <input id="blank-input" type="hidden" name="blanks">
+          <div id="blank-display">
             (You must enter a length before you can choose blanks.)
           </div>
         </div>
-        <div class="form-group">
-          <label for="constant">Enter the first number in the sequence</label>
-          <input type="text" class="form-control" name="constant" placeholder="0">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button id="new-challenge-submit-button" type="submit" disabled class="btn btn-primary">Submit</button>
       </form>
     </main>
     <% include ./../static/partials/baseScripts.ejs %>
     <script>
-      function updateBlanks () {
-        console.log("test");
+      const MAX_SLOTS = 20;
+      const MIN_SLOTS = 3;
+      const BLANK = "__";
+      const blanks = new Array(MAX_SLOTS).fill(false);
+
+      function handleBlankChange (checkbox) {
+        let index = parseInt(checkbox.name.split("-")[1]);
+        blanks[index] = checkbox.checked;
+        updateBlanks();
       }
-      $(document).ready(() => {
-        $('#slot-input').change((e) => {
-          let slots = $('#slot-input').val();
-          let html = '';
-          let formula = $('#formula-input').val();
-          console.log(math.parse(formula));
-          for (var i = 0; i < slots; i++) {
-            html += '<label class="form-check-label">';
-            html += '<input type="checkbox" class="form-check-input" name="blank-' + (i + 1) + '">';
-            html += '</label>';
+
+      function updateBlanks () {
+        let slots = $('#slot-input').val();
+        if (slots > MAX_SLOTS) {
+          slots = MAX_SLOTS;
+          $('#slot-input').val(MAX_SLOTS);
+        } else if (slots < MIN_SLOTS) {
+          slots = MIN_SLOTS;
+          $('#slot-input').val(MIN_SLOTS);
+        }
+        let minBlanks = 1;
+        let maxBlanks = Math.floor((slots - 1) / 2);
+        $('#blank-label').html("Choose " + minBlanks + "-" + maxBlanks + " slots to be blank:");
+        let html = '';
+        $('#formula-input').val($('#formula-input').val().toString().toLowerCase());
+        let unsimplifiedFormula = math.parse($('#formula-input').val());
+        let simplifiedFormula = math.simplify(unsimplifiedFormula);
+        $('#simplified-formula-input').val(simplifiedFormula.toString());
+        $('#formula-simplified').html("Simplifies to: " + simplifiedFormula.toString());
+        let formula = simplifiedFormula.compile();
+        let blankString = '';
+        let isValid = true;
+        let blankCount = 0;
+        for (var i = 0; i < slots; i++) {
+          html += '<div class="blank-display"><span id="slot-' + (i) + '">';
+          if (blanks[i] === true) {
+            html += "___";
+            blankString += "_";
+            blankCount++;
+          } else {
+            try {
+              html += formula.eval({x: (i + 1)});
+            } catch (e) {
+              html = "Invalid formula. Make sure the only variable you're using is x.";
+              isValid = false;
+              break;
+            }
+            blankString += "n";
           }
-          $('#blank-input').html(html);
-        });
+          if (i < slots-1) html += ",";
+          html += '</span><label>';
+          html += '<input type="checkbox" name="blank-' + (i) + '"' + (blanks[i] === true ? " checked " : " ") + 'onclick="handleBlankChange(this)">';
+          html += '</label></div>';
+        }
+        if (blankCount < minBlanks || blankCount > maxBlanks) {
+          isValid = false;
+        }
+        $('#blank-display').html(html);
+        $('#blank-input').val(blankString);
+        //$('#new-challenge-submit-button').disabled = !isValid;
+        $('#new-challenge-submit-button').attr("disabled", !isValid);
+      }
+
+      $(document).ready((e) => {
+        $('#slot-input').change(updateBlanks);
+        $('#formula-input').change(updateBlanks);
       });
     </script>
   </body>

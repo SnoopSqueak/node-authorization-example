@@ -15,8 +15,7 @@ module.exports = {
         type: Sequelize.STRING(100)
       },
       blanks: {
-        // 20 total slots... 19/2 = ~9
-        type: Sequelize.STRING(9)
+        type: Sequelize.STRING(20)
       },
       createdAt: {
         allowNull: false,

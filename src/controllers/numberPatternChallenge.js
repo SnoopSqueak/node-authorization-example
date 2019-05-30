@@ -17,29 +17,19 @@ module.exports = {
   show(req, res, next) {
     numberPatternChallengesQueries.getNumberPatternChallenge(req.params.id, (err, numberPatternChallenge) => {
       if (err || numberPatternChallenge == null) {
-        console.log("Should probably flash this:");
         console.log(err);
-        res.redirect(404, "/");
+        req.flash("error", {param: "Error retrieving number pattern", msg: err});
+        res.redirect(404, "/number_pattern_challenges");
       } else {
-        // Challenge:
-        // <% for (var i = 1; i < numberPatternChallenge.slots + 1; i++) { %>
-        //   <% if (numberPatternChallenge.blanks.includes(i)) { %>
-        //     <%= "_".trim() %>
-        //   <% } else { %>
-        //     <%= math.parse(numberPatternChallenge.formula).compile().eval({x: i}).toString().trim() %>
-        //   <% } %>
-        //   <% if (i < numberPatternChallenge.slots) { %>
-        //     <%= ",".trim() %>
-        //   <% } %>
-        // <% } %>
         let challenge = '';
-        for (var i = 1; i < numberPatternChallenge.slots + 1; i++) {
-          if (numberPatternChallenge.blanks.includes(i)) {
-            challenge += '_';
+        let formula = math.parse(numberPatternChallenge.formula).compile();
+        for (var i = 0; i < numberPatternChallenge.slots; i++) {
+          if (numberPatternChallenge.blanks[i] === "_") {
+            challenge += '__';
           } else {
-            challenge += math.parse(numberPatternChallenge.formula).compile().eval({x: i});
+            challenge += formula.eval({x: (i + 1)});
           }
-          if (i < numberPatternChallenge.slots) {
+          if (i < numberPatternChallenge.slots + 1) {
             challenge += ', ';
           }
         }
@@ -54,21 +44,28 @@ module.exports = {
   },
 
   create(req, res, next) {
+    if (!req.user) {
+      req.flash("error", {param: "Error", msg: "Please sign in before creating a new number pattern challenge"});
+      res.redirect("/users/sign_in");
+    }
     let newNumberPatternChallenge = {
       slots: req.body.slots,
       blanks: req.body.blanks,
       formula: req.body.formula,
-      userId: req.user.dataValues.id,
-      constant: req.body.constant
+      userId: req.user.dataValues.id
     };
     numberPatternChallengesQueries.createNumberPatternChallenge(newNumberPatternChallenge, (err, numberPatternChallenge) => {
       if (err) {
         console.log(err);
-        // this line probably won't work based on messages.ejs...
-        // i'll check the error object in the log and figure out which
-        // property stores the actual error message
-        req.flash("error", {param: err.name, msg: err.errors[0].message});
-        res.redirect("/number_pattern_challenges/sign_up");
+        let message = "The challenge was not created, please verify input values."
+        // I'm not sure how to reliably get the actual error message from Sequelize.
+        // if (err.errors) {
+        //   message = err.errors[0].message;
+        // } else {
+        //   message = err.toString();
+        // }
+        req.flash("error", {param: err.name, msg: message});
+        res.redirect("/number_pattern_challenges/new");
       } else {
         req.flash("notice", "New number pattern challenge was created!");
         res.redirect("/number_pattern_challenges/" + numberPatternChallenge.id);
