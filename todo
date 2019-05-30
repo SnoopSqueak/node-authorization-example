@@ -1,4 +1,7 @@
 * Add the ability to "attempt" challenges by filling in the blanks and submitting to compare with the real answers
+* Make attempt button only visible to users who are signed in
+* Signed in users can view the challenges they've completed, as well as view the solution on a particular challenge if they have completed it
+* should users be able to give up on a problem to see the solution without solving it?
 
 Authentication:
 * Only display the formula on a number pattern challenge if you're the owner or if you have already solved it
@@ -6,5 +9,11 @@ Authentication:
 * Standard users are guests plus the ability to create challenges, and the abilities to update and delete their own challenges
 * Admin users are standard users plus the ability to delete ANY challenge
 
+Wishlist:
 * integration testing would be nice, although it would take more time to be comprehensive than I have, so specs in this project will be light.
   There will be some for the authentication stories.
+* Allow users to rate difficulty and enjoyment of completed challenges, display those ratings on each challenge, graphs and things
+* I feel like I have a lot of repeated code, it would be great to put the challenge rendering/parsing in one place... but not worth the effort right now.
+  Often it's best to let things develop naturally...ish. I don't want to get in my own way, but I also don't want to go the wrong way.
+  Maybe a numberPatternChallenge partial would help. I could include it in the new, show, attempt, edit, etc views. It could receive a flag to tell it
+    whether to show blanks as underscores, checkboxes, or input text areas. That sounds smart, I may try that next time.

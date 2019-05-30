@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <% include ./../static/partials/head.ejs %>
+  </head>
+  <body>
+    <% include ./../static/partials/navbar.ejs %>
+    <main>
+      <% include ./../static/partials/messages.ejs %>
+      <h1>Number Pattern Challenge #<%= numberPatternChallenge.id %></h1>
+      <span><a href="/number_pattern_challenges/<%= numberPatternChallenge.id %>">Back to challenge</a></span>
+      <h3>Fill in the blanks. When you are finished, click "Check Answers" to see if you're correct.</h3>
+      <form action="/number_pattern_challenges/<%= numberPatternChallenge.id %>/attempt" method="post">
+        <div class="form-group">
+          <input id="guess-input" type="hidden" name="guess">
+          <p>
+            <%= Object.keys(oldBody) %>
+            <% if (Object.keys(oldBody).length > 0) { %>
+              <%= oldBody['blank-4'] %>
+            <% } %>
+            <% for (var i = 0; i < numberPatternChallenge.slots; i++) { %>
+              <% if (numberPatternChallenge.blanks[i] === "_") { %>
+                <% if (typeof oldBody != undefined) { %>
+                  <input class="blank-number-input" type="number" placeholder="?" name="blank-<%= i %>">
+                <% } else { %>
+                  <input class="blank-number-input" type="number" placeholder="?" name="blank-<%= i %>" value="<%= oldBody['blank-' + i] %>">
+                <% } %>
+              <% } else { %>
+                <span><%= math.parse(numberPatternChallenge.formula).compile().eval({x: (i + 1)}) %></span>
+              <% } %>
+              <% if (i < numberPatternChallenge.slots - 1) { %>
+                <span>, </span>
+              <% } %>
+            <% } %>
+          </p>
+        </div>
+        <button type="submit" class="btn btn-primary">Check Answers</button>
+      </form>
+    </main>
+    <% include ./../static/partials/baseScripts.ejs %>
+  </body>
+</html>

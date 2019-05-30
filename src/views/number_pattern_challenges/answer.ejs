@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <% include ./../static/partials/head.ejs %>
+  </head>
+  <body>
+    <% include ./../static/partials/navbar.ejs %>
+    <main>
+      <% include ./../static/partials/messages.ejs %>
+      <h1>Number Pattern Challenge #<%= numberPatternChallenge.id %></h1>
+      <span><a href="/number_pattern_challenges/<%= numberPatternChallenge.id %>">Back to challenge</a></span>
+      <h4>Formula:</h4>
+      <p><%= math.parse(numberPatternChallenge.formula).toString() %></p>
+      <h4>Challenge:</h4>
+      <p><%= numberPatternChallenge.challenge %></p>
+      <h4>Full pattern:</h4>
+      <p>WIP</p>
+    </main>
+    <% include ./../static/partials/baseScripts.ejs %>
+  </body>
+</html>

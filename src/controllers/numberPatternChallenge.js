@@ -71,5 +71,59 @@ module.exports = {
         res.redirect("/number_pattern_challenges/" + numberPatternChallenge.id);
       }
     });
+  },
+
+  getAttemptForm(req, res, next) {
+    numberPatternChallengesQueries.getNumberPatternChallenge(req.params.id, (err, numberPatternChallenge) => {
+      if (err || numberPatternChallenge == null) {
+        console.log(err);
+        req.flash("error", {param: "Error retrieving number pattern", msg: err});
+        res.redirect(404, "/number_pattern_challenges");
+      } else {
+        // I haven't decided yet whether I want to do this in the controller or the view
+        let challenge = '';
+        let formula = math.parse(numberPatternChallenge.formula).compile();
+        for (var i = 0; i < numberPatternChallenge.slots; i++) {
+          if (numberPatternChallenge.blanks[i] === "_") {
+            challenge += '__';
+          } else {
+            challenge += formula.eval({x: (i + 1)});
+          }
+          if (i < numberPatternChallenge.slots + 1) {
+            challenge += ', ';
+          }
+        }
+        numberPatternChallenge.challenge = challenge;
+        // I HATE that I have to pass oldBody explicitly as undefined here...
+        // if it's not defined... it's undefined! bad ejs. bad JavaScript. >:c
+        res.render("number_pattern_challenges/attempt", {numberPatternChallenge, math, oldBody: {}});
+      }
+    });
+  },
+
+  attempt(req, res, next) {
+    numberPatternChallengesQueries.getNumberPatternChallenge(req.params.id, (err, numberPatternChallenge) => {
+      if (err || numberPatternChallenge == null) {
+        console.log(err);
+        req.flash("error", {param: "Error retrieving number pattern", msg: err});
+        res.redirect(404, "/number_pattern_challenges");
+      } else {
+        // compare submitted answer to actual answer using MATHS
+        // redirect to same attempt page if failed, or success page if passed?
+        let formula = math.parse(numberPatternChallenge.formula).compile();
+        for (var i = 0; i < numberPatternChallenge.slots; i++) {
+          let guess = parseInt(req.body["blank-" + i]);
+          if (numberPatternChallenge.blanks[i] === "_" && guess !== formula.eval({x: (i + 1)})) {
+            req.flash("error", {param: "Wrong value for slot #" + (i + 1), msg: "Found " + guess + " (parsed from '" + req.body["blank-" + i] + "'), expected something else."});
+            // I want to stay on the page without clearing values, and also flash the error...
+            //res.redirect("/number_pattern_challenges/" + numberPatternChallenge.id + "/attempt");
+            res.render("number_pattern_challenges/attempt", {numberPatternChallenge, math, oldBody: req.body});
+            return;
+          }
+        }
+        req.flash("notice", "You solved it!");
+        res.render("number_pattern_challenges/answer", {numberPatternChallenge, math});
+      }
+    });
   }
 };
