@@ -12,7 +12,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    role: DataTypes.INTEGER
+    role: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    }
   }, {});
   User.associate = function(models) {
     User.hasMany(models.NumberPatternChallenge, {
@@ -20,5 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       as: "numberPatternChallenges"
     })
   };
+
+  User.prototype.isAdmin = function () {
+    return (this.role === 2);
+  };
+
   return User;
 };

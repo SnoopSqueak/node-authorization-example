@@ -12,6 +12,7 @@
       <p><%= math.parse(numberPatternChallenge.formula).toString() %></p>
       <h4>Challenge:</h4>
       <p><%= numberPatternChallenge.challenge %></p>
+      <a href="/number_pattern_challenges/<%= numberPatternChallenge.id %>/attempt" class="btn btn-success">Attempt Challenge</a>
     </main>
     <% include ./../static/partials/baseScripts.ejs %>
   </body>

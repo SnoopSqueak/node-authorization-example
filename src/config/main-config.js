@@ -26,6 +26,5 @@ module.exports = {
       res.locals.currentUser = req.user;
       next();
     });
-    app.locals.math = require('mathjs');
   }
 };

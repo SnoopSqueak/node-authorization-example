@@ -2,7 +2,6 @@ const NumberPatternChallenge = require("./models").NumberPatternChallenge;
 
 module.exports = {
   getAllNumberPatternChallenges(callback) {
-    console.log("TODO: add a public/private flag to number pattern challenges");
     return NumberPatternChallenge.findAll()
     .then((numberPatternChallenges) => {
       callback(null, numberPatternChallenges);
@@ -27,7 +26,8 @@ module.exports = {
       slots: newNumberPatternChallenge.slots,
       formula: newNumberPatternChallenge.formula,
       blanks: newNumberPatternChallenge.blanks,
-      userId: newNumberPatternChallenge.userId
+      userId: newNumberPatternChallenge.userId,
+      public: newNumberPatternChallenge.public
     })
     .then((numberPatternChallenge) => {
       callback(null, numberPatternChallenge);

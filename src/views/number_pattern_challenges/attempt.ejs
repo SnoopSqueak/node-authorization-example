@@ -14,13 +14,9 @@
         <div class="form-group">
           <input id="guess-input" type="hidden" name="guess">
           <p>
-            <%= Object.keys(oldBody) %>
-            <% if (Object.keys(oldBody).length > 0) { %>
-              <%= oldBody['blank-4'] %>
-            <% } %>
             <% for (var i = 0; i < numberPatternChallenge.slots; i++) { %>
               <% if (numberPatternChallenge.blanks[i] === "_") { %>
-                <% if (typeof oldBody != undefined) { %>
+                <% if (Object.keys(oldBody).length === 0) { %>
                   <input class="blank-number-input" type="number" placeholder="?" name="blank-<%= i %>">
                 <% } else { %>
                   <input class="blank-number-input" type="number" placeholder="?" name="blank-<%= i %>" value="<%= oldBody['blank-' + i] %>">

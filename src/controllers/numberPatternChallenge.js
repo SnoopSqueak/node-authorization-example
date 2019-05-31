@@ -51,7 +51,8 @@ module.exports = {
     let newNumberPatternChallenge = {
       slots: req.body.slots,
       blanks: req.body.blanks,
-      formula: req.body.formula,
+      formula: req.body.formula.toLowerCase(),
+      public: req.body.public,
       userId: req.user.dataValues.id
     };
     numberPatternChallengesQueries.createNumberPatternChallenge(newNumberPatternChallenge, (err, numberPatternChallenge) => {
@@ -67,7 +68,7 @@ module.exports = {
         req.flash("error", {param: err.name, msg: message});
         res.redirect("/number_pattern_challenges/new");
       } else {
-        req.flash("notice", "New number pattern challenge was created!");
+        req.flash("success", "New number pattern challenge was created!");
         res.redirect("/number_pattern_challenges/" + numberPatternChallenge.id);
       }
     });
@@ -94,8 +95,6 @@ module.exports = {
           }
         }
         numberPatternChallenge.challenge = challenge;
-        // I HATE that I have to pass oldBody explicitly as undefined here...
-        // if it's not defined... it's undefined! bad ejs. bad JavaScript. >:c
         res.render("number_pattern_challenges/attempt", {numberPatternChallenge, math, oldBody: {}});
       }
     });
@@ -108,20 +107,16 @@ module.exports = {
         req.flash("error", {param: "Error retrieving number pattern", msg: err});
         res.redirect(404, "/number_pattern_challenges");
       } else {
-        // compare submitted answer to actual answer using MATHS
-        // redirect to same attempt page if failed, or success page if passed?
         let formula = math.parse(numberPatternChallenge.formula).compile();
         for (var i = 0; i < numberPatternChallenge.slots; i++) {
           let guess = parseInt(req.body["blank-" + i]);
           if (numberPatternChallenge.blanks[i] === "_" && guess !== formula.eval({x: (i + 1)})) {
-            req.flash("error", {param: "Wrong value for slot #" + (i + 1), msg: "Found " + guess + " (parsed from '" + req.body["blank-" + i] + "'), expected something else."});
-            // I want to stay on the page without clearing values, and also flash the error...
-            //res.redirect("/number_pattern_challenges/" + numberPatternChallenge.id + "/attempt");
+            req.flash("error", {param: "Wrong value for slot #" + (i + 1), msg: "Found " + guess + " (parsed from '" + req.body["blank-" + i] + "'), expected something else. Guess again!"});
             res.render("number_pattern_challenges/attempt", {numberPatternChallenge, math, oldBody: req.body});
             return;
           }
         }
-        req.flash("notice", "You solved it!");
+        req.flash("success", "You solved it!");
         res.render("number_pattern_challenges/answer", {numberPatternChallenge, math});
       }
     });

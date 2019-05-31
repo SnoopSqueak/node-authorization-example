@@ -1,12 +1,12 @@
-* Add the ability to "attempt" challenges by filling in the blanks and submitting to compare with the real answers
-* Make attempt button only visible to users who are signed in
-* Signed in users can view the challenges they've completed, as well as view the solution on a particular challenge if they have completed it
 * should users be able to give up on a problem to see the solution without solving it?
+* add a public/private flag to number pattern challenges
 
 Authentication:
+* Make attempt button only visible to users who are signed in
 * Only display the formula on a number pattern challenge if you're the owner or if you have already solved it
 * Guest users can look at challenges, and maybe even attempt them, without an account
 * Standard users are guests plus the ability to create challenges, and the abilities to update and delete their own challenges
+* Signed in users can view the challenges they've completed, as well as view the solution on a particular challenge if they have completed it
 * Admin users are standard users plus the ability to delete ANY challenge
 
 Wishlist:

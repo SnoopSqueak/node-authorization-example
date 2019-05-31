@@ -13,10 +13,10 @@ module.exports = {
   signIn(req, res, next) {
     passport.authenticate("local")(req, res, (param) => {
       if (!req.user) {
-        req.flash("notice", "Sign in failed. Please try again, or sign up if you don't have an account.");
+        req.flash("error", "Sign in failed. Please try again, or sign up if you don't have an account.");
         res.redirect("/users/sign_in");
       } else {
-        req.flash("notice", "You've successfully signed in!");
+        req.flash("success", "You've successfully signed in!");
         res.redirect("/");
       }
     });
@@ -24,7 +24,7 @@ module.exports = {
 
   signOut(req, res, next) {
     req.logout();
-    req.flash("notice", "You've successfully signed out!");
+    req.flash("success", "You've successfully signed out!");
     res.redirect("/");
   },
 
@@ -41,7 +41,7 @@ module.exports = {
         res.redirect("/users/sign_up");
       } else {
         passport.authenticate("local")(req, res, () => {
-          req.flash("notice", "You've successfully signed in!");
+          req.flash("success", "You've successfully signed in!");
           res.redirect("/");
         });
       }
